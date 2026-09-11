@@ -1,46 +1,36 @@
-int dp[1000];
+int dp[400];
 
-int fun(int i,vector<int>&nums,vector<int>&cost){
-    if(i>=nums.size()) return 0;
+int fun(int i,vector<int>&days,vector<int>&cost){
+    if(i>=days.size()) return 0;
+
+    int curr=days[i];
 
     if(dp[i]!=-1) return dp[i];
 
-    int c1=cost[0]+fun(i+1,nums,cost);
+    int one=cost[0]+fun(i+1,days,cost);
 
-    int id1=nums.size(),id2=nums.size();
+    int id1=days.size(),id2=days.size();
 
-    // 7 day 
+    int seven,thirty;
 
-    // for(int j=i+1;j<nums.size();j++){
-    //     if(nums[j]>=nums[i]+7){
-    //         id1=j;
-    //         break;
-    //     }
-    // }
-
-    int l=i+1,h=nums.size()-1;
-
-    while(l<=h){
-        int mid=(l+h)/2;
-        if(nums[mid]>=nums[i]+7){
-            id1=mid;
-            h=mid-1;
-        }else{
-            l=mid+1;
+    for(int j=i+1;j<days.size();j++){
+        if(days[j]>=curr+7){
+            id1=j;
+            break;
         }
     }
 
-    for(int j=i+1;j<nums.size();j++){
-        if(nums[j]>=nums[i]+30){
+    for(int j=i+1;j<days.size();j++){
+        if(days[j]>=curr+30){
             id2=j;
             break;
         }
     }
 
-    int c2=cost[1]+fun(id1,nums,cost);
-    int c3=cost[2]+fun(id2,nums,cost);
+    seven=cost[1]+fun(id1,days,cost);
+    thirty=cost[2]+fun(id2,days,cost);
 
-    return dp[i]=min({c1,c2,c3});
+    return dp[i]=min({one,seven,thirty});
 }
 
 
