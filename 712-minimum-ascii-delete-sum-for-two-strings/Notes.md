@@ -1,1 +1,1 @@
-<h2>minimum-ascii-delete-sum-for-two-strings Notes</h2><hr>[ Time taken: 31m 50s ]
+<h2>minimum-ascii-delete-sum-for-two-strings Notes</h2><hr>[ Time taken: 39m 19s ]
