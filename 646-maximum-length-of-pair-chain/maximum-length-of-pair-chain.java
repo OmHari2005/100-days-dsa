@@ -12,12 +12,24 @@ class Solution {
 
         int id = nums.length;
 
-        for (int j = i + 1; j < nums.length; j++) {
+       /* for (int j = i + 1; j < nums.length; j++) {
             if (nums[j][0] > nums[i][1]) {
                 id = j;
                 break;
             }
+        }*/
+        int l=i+1;
+    int h=nums.length-1;
+
+    while(l<=h){
+        int mid=(l+h)/2;
+        if(nums[mid][0]>nums[i][1]){
+            id=mid;
+            h=mid-1;
+        }else{
+            l=mid+1;
         }
+    }
         int a = 1 + fun(id, nums);
         int b = fun(i + 1, nums);
 
