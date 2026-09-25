@@ -1,0 +1,32 @@
+import java.util.Arrays;
+
+class Solution {
+    int[] dp = new int[1001];
+
+    int fun(int i, int[][] nums) {
+        if (i >= nums.length) {
+            return 0;
+        }
+
+        if (dp[i] != -1) return dp[i];
+
+        int id = nums.length;
+
+        for (int j = i + 1; j < nums.length; j++) {
+            if (nums[j][0] > nums[i][1]) {
+                id = j;
+                break;
+            }
+        }
+        int a = 1 + fun(id, nums);
+        int b = fun(i + 1, nums);
+
+        return dp[i] = Math.max(a, b);
+    }
+
+    public int findLongestChain(int[][] pairs) {
+        Arrays.fill(dp, -1);
+        Arrays.sort(pairs, (a, b) -> Integer.compare(a[0], b[0]));
+        return fun(0, pairs);
+    }
+}
