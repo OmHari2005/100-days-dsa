@@ -5,7 +5,9 @@
         }
         return;
     }
-    for
+    for (int i = ind; i< arr.length;i++){
+    if()
+    }
 
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         
@@ -31,7 +33,7 @@ class Solution {
 
         for (int i = idx; i < arr.length; i++) {
 
-            if (i > idx && arr[i] == arr[i - 1]) {
+            if (i != idx && arr[i] == arr[i - 1]) {
                 continue;
             }
 
