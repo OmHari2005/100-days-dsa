@@ -1,35 +1,20 @@
 class Solution {
     public int minAddToMakeValid(String s) {
-        int x=0;
-        int y=0;
-        int ans =0;
-        for( char i : s.toCharArray()){
-            if(i=='(')
-            x++;
-            else y++;
-            if(y>x){
-             ans++;
-             x++;
+        int open = 0;  // '('
+        int close= 0; //  ')'
+        
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                close++; // We need a ')' to balance this '('
+            } else {
+                if (close> 0) {
+                    close--; // Matches an earlier '('
+                } else {
+                    open++; // Unmatched ')', so we need an extra '('
+                }
             }
         }
-        return ans+ Math.abs(x-y);
+        
+        return open + close;
     }
 }
-
-
-
-/*class Solution {
-public:
-    int minAddToMakeValid(string s) {
-        int x=0,y=0,ans=0;;
-        for(auto a:s){
-            if(a=='(') x++;
-            else y++;
-
-            if(y>x){ ans++; x++;}
-        }
-
-        return ans+abs(x-y);
-    }
-};
-*/
