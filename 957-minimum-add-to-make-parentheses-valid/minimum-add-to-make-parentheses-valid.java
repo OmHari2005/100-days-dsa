@@ -5,12 +5,12 @@ class Solution {
         
         for (char c : s.toCharArray()) {
             if (c == '(') {
-                close++; // We need a ')' to balance this '('
+                close++; //  need  ')' to balance '('
             } else {
                 if (close> 0) {
-                    close--; // Matches an earlier '('
+                    close--; // Matches  early '('
                 } else {
-                    open++; // Unmatched ')', so we need an extra '('
+                    open++; // Unmatched ')' need  extra '('
                 }
             }
         }
