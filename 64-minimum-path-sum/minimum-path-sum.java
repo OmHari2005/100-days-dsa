@@ -1,20 +1,20 @@
 class Solution {
-    public int func(int i, int j, int[][] grid, int[][] dp) {
-        if (i==grid.length-1 && j==grid[0].length-1) {
-            return grid[i][j];
+    public int func(int x, int y, int[][] grid, int[][] dp) {
+        if (x==grid.length-1 && y==grid[0].length-1) {
+            return grid[x][y];
         }
-        if (i>=grid.length || j>=grid[0].length) {
+        if (x>=grid.length || y>=grid[0].length) {
             return Integer.MAX_VALUE;
         }
 
-        if (dp[i][j] != -1) {
-            return dp[i][j];
+        if (dp[x][y] != -1) {
+            return dp[x][y];
         }
 
-        int r = func(i, j+1, grid, dp);
-        int d = func(i+1, j, grid, dp);
+        int r = func(x, y+1, grid, dp);
+        int d = func(x+1, y, grid, dp);
 
-        return dp[i][j] = grid[i][j]+Math.min(r, d);
+        return dp[x][y] = grid[x][y]+Math.min(r, d);
         
     }
 
