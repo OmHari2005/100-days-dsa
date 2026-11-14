@@ -3,22 +3,15 @@ class Solution {
         int n = nums.size();
         int ans = Integer.MAX_VALUE;
 
-        for (int len = l; len <= r; len++) {
+        for (int start = 0; start < n; start++) {
             int sum = 0;
 
-            for (int i = 0; i < len; i++) {
-                sum += nums.get(i);
-            }
+            for (int end = start; end < n; end++) {
+                sum += nums.get(end);
 
-            if (sum > 0) {
-                ans = Math.min(ans, sum);
-            }
+                int length = end - start + 1;
 
-            for (int i = len; i < n; i++) {
-                sum += nums.get(i);
-                sum -= nums.get(i - len);
-
-                if (sum > 0) {
+                if (length >= l && length <= r && sum > 0) {
                     ans = Math.min(ans, sum);
                 }
             }
