@@ -1,75 +1,100 @@
 import java.util.*;
 
 class Solution {
-    private static final long MOD1 = 1_000_000_007L;
-    private static final long MOD2 = 1_000_000_009L;
-    private static final long BASE = 100_003L;
-
-    private long[] hash1;
-    private long[] hash2;
-    private long[] power1;
-    private long[] power2;
-
     public int smallestUniqueSubarray(int[] nums) {
         int n = nums.length;
 
-        hash1 = new long[n + 1];
-        hash2 = new long[n + 1];
-        power1 = new long[n + 1];
-        power2 = new long[n + 1];
-
-        power1[0] = 1;
-        power2[0] = 1;
+        Integer[] suffix = new Integer[n];
+        int[] rank = new int[n];
 
         for (int i = 0; i < n; i++) {
-            hash1[i + 1] = (hash1[i] * BASE + nums[i]) % MOD1;
-            hash2[i + 1] = (hash2[i] * BASE + nums[i]) % MOD2;
-
-            power1[i + 1] = power1[i] * BASE % MOD1;
-            power2[i + 1] = power2[i] * BASE % MOD2;
+            suffix[i] = i;
+            rank[i] = nums[i];
         }
 
-        int low = 1;
-        int high = n;
+        for (int length = 1; length < n; length *= 2) {
+            final int gap = length;
+            final int[] currentRank = rank;
 
-        while (low < high) {
-            int mid = low + (high - low) / 2;
+            Arrays.sort(suffix, (a, b) -> {
+                if (currentRank[a] != currentRank[b]) {
+                    return Integer.compare(currentRank[a], currentRank[b]);
+                }
 
-            if (hasUnique(mid, n)) {
-                high = mid;
-            } else {
-                low = mid + 1;
+                int secondA = a + gap < n ? currentRank[a + gap] : -1;
+                int secondB = b + gap < n ? currentRank[b + gap] : -1;
+
+                return Integer.compare(secondA, secondB);
+            });
+
+            int[] nextRank = new int[n];
+
+            for (int i = 1; i < n; i++) {
+                int a = suffix[i - 1];
+                int b = suffix[i];
+
+                int secondA = a + gap < n ? rank[a + gap] : -1;
+                int secondB = b + gap < n ? rank[b + gap] : -1;
+
+                boolean different =
+                    rank[a] != rank[b] || secondA != secondB;
+
+                nextRank[b] = nextRank[a] + (different ? 1 : 0);
+            }
+
+            rank = nextRank;
+
+            if (rank[suffix[n - 1]] == n - 1) {
+                break;
             }
         }
 
-        return low;
-    }
+        int[] position = new int[n];
 
-    private boolean hasUnique(int len, int n) {
-        Map<Long, Integer> frequency = new HashMap<>();
-
-        for (int start = 0; start + len <= n; start++) {
-            int end = start + len;
-
-            long first = (
-                hash1[end] - hash1[start] * power1[len] % MOD1 + MOD1
-            ) % MOD1;
-
-            long second = (
-                hash2[end] - hash2[start] * power2[len] % MOD2 + MOD2
-            ) % MOD2;
-
-            long key = (first << 32) | second;
-
-            frequency.put(key, frequency.getOrDefault(key, 0) + 1);
+        for (int i = 0; i < n; i++) {
+            position[suffix[i]] = i;
         }
 
-        for (int count : frequency.values()) {
-            if (count == 1) {
-                return true;
+        int[] lcp = new int[n];
+        int common = 0;
+
+        for (int i = 0; i < n; i++) {
+            int pos = position[i];
+
+            if (pos == 0) {
+                common = 0;
+                continue;
+            }
+
+            int j = suffix[pos - 1];
+
+            while (i + common < n &&
+                   j + common < n &&
+                   nums[i + common] == nums[j + common]) {
+                common++;
+            }
+
+            lcp[pos] = common;
+
+            if (common > 0) {
+                common--;
             }
         }
 
-        return false;
+        int answer = n;
+
+        for (int i = 0; i < n; i++) {
+            int previousLcp = lcp[i];
+            int nextLcp = i + 1 < n ? lcp[i + 1] : 0;
+
+            int needed = Math.max(previousLcp, nextLcp) + 1;
+            int suffixLength = n - suffix[i];
+
+            if (needed <= suffixLength) {
+                answer = Math.min(answer, needed);
+            }
+        }
+
+        return answer;
     }
 }
