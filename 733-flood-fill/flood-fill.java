@@ -1,39 +1,26 @@
 class Solution {
     public int[][] floodFill(int[][] image, int sr, int sc, int color) {
-        int n = image.length;
-        int m = image[0].length;
-        int oldColor = image[sr][sc];
-        if (oldColor == color) {
-            return image;
-        }
-        Queue<int[]> queue = new LinkedList<>();
+        int original =image[sr][sc];
+       if(original==color){
+       return image;
+       }
+       dfs(image,sr,sc,original,color);
+       return image;
+    }
+    public void dfs(int image[][],int sr,int sc,int original,int color){
+        int n=image.length;
+    int m=image[0].length;
+    if(sr<0||sc<0||sr>=n||sc>=m){
+        return;
+    }
+    if(image[sr][sc]!=original){
+        return;
+    }
+    image[sr][sc]=color;
+    dfs(image,sr+1,sc,original,color);
+    dfs(image,sr-1,sc,original,color);
+    dfs(image,sr,sc+1,original,color);
+    dfs(image,sr,sc-1,original,color);
 
-        queue.add(new int[]{sr, sc});
-        image[sr][sc] = color;
-
-        int[] rowDir = {-1, 1, 0, 0};
-        int[] colDir = {0, 0, -1, 1};
-
-        while (!queue.isEmpty()) {
-            int[] cell = queue.remove();
-
-            int row = cell[0];
-            int col = cell[1];
-
-            for (int i = 0; i < 4; i++) {
-                int newRow = row + rowDir[i];
-                int newCol = col + colDir[i];
-
-                if (newRow >= 0 && newRow < n &&
-                    newCol >= 0 && newCol < m &&
-                    image[newRow][newCol] == oldColor) {
-
-                    image[newRow][newCol] = color;
-                    queue.add(new int[]{newRow, newCol});
-                }
-            }
-        }
-
-        return image;
     }
 }
